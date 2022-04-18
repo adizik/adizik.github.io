@@ -78,7 +78,7 @@ function makeTable() {
 	let entriesToPrint = 15;
 	busData.every(entry => {
 		if (entry.date >= today && entry.time >= timeNow) {
-			generateTableRow(table, [entry.date, entry.time, entry.route, getGate(entry.time, entry.route)]);
+			generateTableRow(table, [entry.date, entry.time.slice(0,-3), entry.route, getGate(entry.time, entry.route)]);
 			if (entriesToPrint-- <= 0) {
 				return false;
 			}
