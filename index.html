@@ -8,22 +8,26 @@
 </head>
  
 <body>
+<script src="bus_table.js"></script>
 
 <h1>Bus schedule</h1>
 <i>For buses 158, 156R, 159R departing from Port Authority</i>
-<h2><div id = "clock"></div></h2>
+<h2><div id = "clock">
+	<script type = "text/javascript">
+		currentTime();
+	</script>
+</div></h2>
 
 <div id = "bus_table">
 <table>
+	<script type = "text/javascript">
+		makeTable();
+	</script>
 </table>
 </div>
 
 <script src="bus_table.js"></script>
 
-<script type = "text/javascript">
-currentTime();
-makeTable();
-</script>
 </body> 
  
 </html>
