@@ -20,7 +20,7 @@ function currentTime() {
 
 function getGate(time, route) 
 {
-	if (route == "158") {
+	if (route.startsWith("158")) {
 		if (time >= "06:00:00" && time <= "22:00:00") {
 			return "202";
 		} 
@@ -69,15 +69,20 @@ function removeColumn(table, column) {
 		row.deleteCell(column);
 	}
 }
-	
+
+var makeTableTimeoutId;	
 
 function makeTable() {
+	
 	let date = new Date;
 	
 	//add one minute to ensure times are in the future
 	date.setTime(date.getTime() + 1000 * 60);
 	const today = getDate(date);
 	const timeNow = getTime(date, false);
+	
+	let direction = document.getElementById("direction").value;
+	console.log("Call makeTable(), direction: " + direction + ", time: " + getTime(date, true));
 
 	let table = document.getElementById("bus_table").querySelector("table");
 	table.removeChild(table.firstChild);
@@ -101,5 +106,9 @@ function makeTable() {
 	}
 	
 	// Refresh every 3 minutes
-	let t = setTimeout(function(){ makeTable() }, 3*60*1000);
+	if (typeof makeTableTimeoutId != 'undefined') {
+		// Remove old timeout
+		clearTimeout(makeTableTimeoutId);
+	}
+	makeTableTimeoutId = setTimeout(function(){ makeTable() }, 3*1000);
 }

@@ -12,7 +12,13 @@
 <script src="bus_table.js"></script>
 
 <h1>Bus schedule</h1>
-<i>For buses 158, 156R, 159R departing from Port Authority</i>
+<i>For River Road buses departing  
+<select id="direction" onchange="makeTable()">
+            <option value="From">from</option>
+            <option value="To">to</option>
+</select>
+ Port Authority</i>
+
 <h2><div id = "clock">
 	<script type = "text/javascript">
 		currentTime();
