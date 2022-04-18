@@ -12,33 +12,11 @@ function getTime(date, includeSeconds) {
 	return [hour, minute, seconds].join(":");
 }
 function currentTime() {
-  
-	/*
-  let date = new Date(); 
-  let hh = date.getHours();
-  let mm = date.getMinutes();
-  let ss = date.getSeconds();
-  let session = "AM";
 
-
-  if(hh == 0){
-      hh = 12;
-  }
-  if(hh > 12){
-      hh = hh - 12;
-      session = "PM";
-   }
-   hh = (hh < 10) ? "0" + hh : hh;
-   mm = (mm < 10) ? "0" + mm : mm;
-   ss = (ss < 10) ? "0" + ss : ss;
-    
-   let time = hh + ":" + mm + ":" + ss + " "; // + session;
-*/
 	const date = new Date();
 	document.getElementById("clock").innerText = getDate(date) + " " + getTime(date, true); 
 	let t = setTimeout(function(){ currentTime() }, 1000);
 };
-// currentTime()
 
 function getGate(time, route) 
 {
@@ -93,18 +71,15 @@ function makeTable() {
 	date.setTime(date.getTime() + 1000 * 60);
 	const today = getDate(date);
 	const timeNow = getTime(date, false);
-	
-	// document.getElementById("bus_table").innerText = today + "  " + timeNow
-	// let tableText = "<table> <tr> <th> Date </th><th> Time </th><th> Route </th><th> Gate </th> <tr>\n"
+
 	let table = document.getElementById("bus_table").querySelector("table");
 	generateTableHead(table, ["Date", "Time", "Route", "Gate"]);
-	let entriesToPrint = 5;
+	let entriesToPrint = 15;
 	busData.every(entry => {
 		console.log("Today: " + today + ", Checking entry: " + entry.date + " " + entry.time + " " + entry.route);
 		
 		if (entry.date >= today && entry.time >= timeNow) {
-			// document.getElementById("bus_table").innerText = entry.date + " " + entry.time + " " + entry.route + " " + getGate(entry.time, entry.route);
-			// tableText += "<tr> <td> " + entry.date + " </td><td> " + entry.time + " </td><td> " + entry.route + " </td><td> " + getGate(entry.time, entry.route) + " </td></tr>\n";
+
 			generateTableRow(table, [entry.date, entry.time, entry.route, getGate(entry.time, entry.route)]);
 			
 			if (entriesToPrint-- <= 0) {
@@ -113,38 +88,7 @@ function makeTable() {
 		}
 		return true;
 	})	
-	// tableText += "</table>";
-	
-	// document.getElementById("bus_table").innerText = tableText;
 }
-
-
-
-/* function tableCreate() {
-  var body = document.getElementsByTagName('body')[0];
-  var tbl = document.createElement('table');
-  tbl.style.width = '100%';
-  tbl.setAttribute('border', '1');
-  var tbdy = document.createElement('tbody');
-  for (var i = 0; i < 3; i++) {
-    var tr = document.createElement('tr');
-    for (var j = 0; j < 2; j++) {
-      if (i == 2 && j == 1) {
-        break
-      } else {
-        var td = document.createElement('td');
-        td.appendChild(document.createTextNode('\u0020'))
-        i == 1 && j == 1 ? td.setAttribute('rowSpan', '2') : null;
-        tr.appendChild(td)
-      }
-    }
-    tbdy.appendChild(tr);
-  }
-  tbl.appendChild(tbdy);
-  body.appendChild(tbl)
-}
-tableCreate();
-*/
 
 const busData = [
 { "date": 20220404, "time": "06:20:00", "route": "158" },
