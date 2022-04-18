@@ -73,21 +73,21 @@ function makeTable() {
 	const timeNow = getTime(date, false);
 
 	let table = document.getElementById("bus_table").querySelector("table");
+	table.removeChild(table.firstChild);
 	generateTableHead(table, ["Date", "Time", "Route", "Gate"]);
 	let entriesToPrint = 15;
 	busData.every(entry => {
-		console.log("Today: " + today + ", Checking entry: " + entry.date + " " + entry.time + " " + entry.route);
-		
 		if (entry.date >= today && entry.time >= timeNow) {
-
 			generateTableRow(table, [entry.date, entry.time, entry.route, getGate(entry.time, entry.route)]);
-			
 			if (entriesToPrint-- <= 0) {
 				return false;
 			}
 		}
 		return true;
 	})	
+	
+	// Refresh every 3 minutes
+	let t = setTimeout(function(){ makeTable() }, 3*60*1000);
 }
 
 const busData = [
