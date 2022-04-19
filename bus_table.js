@@ -20,7 +20,7 @@ function currentTime() {
 
 function getGate(time, route) 
 {
-	if (route == "158") {
+	if (route.startsWith("158")) {
 		if (time >= "06:00:00" && time <= "22:00:00") {
 			return "202";
 		} 
@@ -69,24 +69,51 @@ function removeColumn(table, column) {
 		row.deleteCell(column);
 	}
 }
-	
+
+var makeTableTimeoutId;	
 
 function makeTable() {
+	
 	let date = new Date;
 	
 	//add one minute to ensure times are in the future
 	date.setTime(date.getTime() + 1000 * 60);
 	const today = getDate(date);
 	const timeNow = getTime(date, false);
+	
+	
+	let direction = document.getElementById("direction").value;
+	var busData;
+	var includeGate = false;
+	
+	if (direction == "From") {
+		busData = busDataFrom;
+		includeGate = true;
+	} 
+	else {
+		busData = busDataTo;
+		includeGate = false;
+	}
+		
 
 	let table = document.getElementById("bus_table").querySelector("table");
 	table.removeChild(table.firstChild);
-	generateTableHead(table, ["Date", "Time", "Route", "Gate"]);
+	
+	let headers = ["Date", "Time", "Route"];	
+	if (includeGate) {
+		headers.push("Gate");
+	}
+	generateTableHead(table, headers);
 	let entriesToPrint = 15;
 	var lastEntry;
 	busData.every(entry => {
 		if (entry.date >= today && entry.time >= timeNow) {
-			generateTableRow(table, [entry.date, entry.time.slice(0,-3), entry.route, getGate(entry.time, entry.route)]);
+			let values = [entry.date, entry.time.slice(0,-3), entry.route];
+			if (includeGate) {
+				values.push(getGate(entry.time, entry.route));
+			}
+			generateTableRow(table, values);
+			
 			if (--entriesToPrint <= 0) {
 				return false;
 			}
@@ -101,5 +128,9 @@ function makeTable() {
 	}
 	
 	// Refresh every 3 minutes
-	let t = setTimeout(function(){ makeTable() }, 3*60*1000);
+	if (typeof makeTableTimeoutId != 'undefined') {
+		// Remove old timeout
+		clearTimeout(makeTableTimeoutId);
+	}
+	makeTableTimeoutId = setTimeout(function(){ makeTable() }, 3*1000);
 }
