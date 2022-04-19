@@ -70,6 +70,17 @@ function removeColumn(table, column) {
 	}
 }
 
+function convertTime(time) {
+	let splitTime = time.split(":");
+	let hr = parseInt(splitTime[0], 10);
+	
+	if (hr > 23) { 
+		splitTime[0] = String(hr - 24).padStart(2, "0");
+	}
+	
+	return splitTime.join(":");
+}
+
 var makeTableTimeoutId;	
 
 function makeTable() {
@@ -107,8 +118,11 @@ function makeTable() {
 	let entriesToPrint = 15;
 	var lastEntry;
 	busData.every(entry => {
-		if (entry.date >= today && entry.time >= timeNow) {
-			let values = [entry.date, entry.time.slice(0,-3), entry.route];
+		if ((entry.date == today && entry.time >= timeNow) || (entry.date > today)) {
+			const depTime = entry.time.slice(0,-3);
+			let values = [(depTime <= "23:59") ? entry.date : entry.date + " +1",  
+			              convertTime(depTime), 
+						  entry.route];
 			if (includeGate) {
 				values.push(getGate(entry.time, entry.route));
 			}
