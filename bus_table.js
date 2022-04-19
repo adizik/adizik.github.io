@@ -81,17 +81,39 @@ function makeTable() {
 	const today = getDate(date);
 	const timeNow = getTime(date, false);
 	
+	
 	let direction = document.getElementById("direction").value;
-	console.log("Call makeTable(), direction: " + direction + ", time: " + getTime(date, true));
+	var busData;
+	var includeGate = false;
+	
+	if (direction == "From") {
+		busData = busDataFrom;
+		includeGate = true;
+	} 
+	else {
+		busData = busDataTo;
+		includeGate = false;
+	}
+		
 
 	let table = document.getElementById("bus_table").querySelector("table");
 	table.removeChild(table.firstChild);
-	generateTableHead(table, ["Date", "Time", "Route", "Gate"]);
+	
+	let headers = ["Date", "Time", "Route"];	
+	if (includeGate) {
+		headers.push("Gate");
+	}
+	generateTableHead(table, headers);
 	let entriesToPrint = 15;
 	var lastEntry;
 	busData.every(entry => {
 		if (entry.date >= today && entry.time >= timeNow) {
-			generateTableRow(table, [entry.date, entry.time.slice(0,-3), entry.route, getGate(entry.time, entry.route)]);
+			let values = [entry.date, entry.time.slice(0,-3), entry.route];
+			if (includeGate) {
+				values.push(getGate(entry.time, entry.route));
+			}
+			generateTableRow(table, values);
+			
 			if (--entriesToPrint <= 0) {
 				return false;
 			}
