@@ -83,12 +83,10 @@ function convertTime(time) {
 
 var makeTableTimeoutId;	
 
-function makeTable() {
+function makeTable({entriesToPrint = 15} = {}) {
 	
 	let date = new Date;
 	
-	//add one minute to ensure times are in the future
-	date.setTime(date.getTime() + 1000 * 60);
 	const today = getDate(date);
 	const timeNow = getTime(date, false);
 	
@@ -115,11 +113,11 @@ function makeTable() {
 		headers.push("Gate");
 	}
 	generateTableHead(table, headers);
-	let entriesToPrint = 15;
+	// let entriesToPrint = 15;
 	var lastEntry;
 	busData.every(entry => {
-		if ((entry.date == today && entry.time >= timeNow) || (entry.date > today)) {
-			const depTime = entry.time.slice(0,-3);
+		if ((entry.date == today && entry.time > timeNow) || (entry.date > today)) {
+			const depTime = entry.time.slice(0,-3); // seconds are always ":00" in the schedule
 			let values = [(depTime <= "23:59") ? entry.date : entry.date + " +1",  
 			              convertTime(depTime), 
 						  entry.route];
@@ -146,5 +144,18 @@ function makeTable() {
 		// Remove old timeout
 		clearTimeout(makeTableTimeoutId);
 	}
-	makeTableTimeoutId = setTimeout(function(){ makeTable() }, 3*1000);
+	makeTableTimeoutId = setTimeout(function(){ makeTable() }, 3*60*1000);
+}
+
+function setDefaultDirection() {
+	let dirSelection = document.getElementById("direction");
+	const date = new Date;
+	const timeNow = getTime(date, true);
+	
+	if (timeNow < "13:00:00") {
+		dirSelection.selectedIndex = 1;
+	}
+	else {
+		dirSelection.selectedIndex = 0;
+	}
 }

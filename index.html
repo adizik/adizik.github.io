@@ -12,15 +12,20 @@
 <script src="bus_table.js"></script>
 
 <h1>Bus schedule</h1>
-<i>For River Road buses departing  
+<i>For Lincoln Harbor buses departing 
 <select id="direction" onchange="makeTable()">
             <option value="From">from</option>
             <option value="To">to</option>
 </select>
  Port Authority</i>
+ <script type = "text/javascript">
+	<!-- 'To' Port Authority in the morning, 'From' in the evening -->
+	setDefaultDirection();
+</script>
 
 <h2><div id = "clock">
 	<script type = "text/javascript">
+		<!-- Display current date/time and let it run -->
 		currentTime();
 	</script>
 </div></h2>
@@ -28,14 +33,12 @@
 <div id = "bus_table">
 <table>
 	<script type = "text/javascript">
-		makeTable();
+		makeTable({entriesToPrint: 5});
 	</script>
 </table>
 <br>
 <i>* Table refreshes every 3 minutes</i>
 </div>
-
-<script src="bus_table.js"></script>
 
 </body> 
  
