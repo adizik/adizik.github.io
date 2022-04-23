@@ -113,7 +113,7 @@ function makeTable({entriesToPrint = 15} = {}) {
 		headers.push("Gate");
 	}
 	generateTableHead(table, headers);
-	// let entriesToPrint = 15;
+
 	var lastEntry;
 	busData.every(entry => {
 		if ((entry.date == today && entry.time > timeNow) || (entry.date > today)) {
