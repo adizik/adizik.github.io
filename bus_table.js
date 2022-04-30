@@ -144,7 +144,7 @@ function makeTable({entriesToPrint = 15} = {}) {
 		// Remove old timeout
 		clearTimeout(makeTableTimeoutId);
 	}
-	makeTableTimeoutId = setTimeout(function(){ makeTable() }, 3*60*1000);
+	makeTableTimeoutId = setTimeout(function(){ makeTable(entriesToPrint) }, 3*60*1000);
 }
 
 function setDefaultDirection() {
